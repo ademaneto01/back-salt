@@ -8,7 +8,7 @@ import api from '../../services/index';
 import { useState } from 'react';
 
 function DashCadastroUsuario() {
-    const [formCadastro, setCadastro] = useState({ nome: '', email: '' });
+    const [formCadastro, setCadastro] = useState({ nome: '', email: '', cidade: '', telefone: '' });
     const [warning, setWarning] = useState({ msg: '', show: false });
 
     function onChange(evt) {
@@ -40,21 +40,26 @@ function DashCadastroUsuario() {
         try {
             await api.post('/cadastro', {
                 nome: formCadastro.nome,
-                email: formCadastro.email
+                email: formCadastro.email,
+                cidade: formCadastro.cidade,
+                telefone: formCadastro.telefone
 
             });
 
             setCadastro({
-                nome: '', email: ''
+                nome: '', email: '', cidade: '', telefone: ''
             });
 
         } catch (error) {
-            return
+            return setWarning({
+                msg: 'E-mail ja existente!',
+                show: true
+            });
         }
     }
     function LimparInput() {
         setCadastro(prev => ({
-            ...prev, nome: '', email: ''
+            ...prev, nome: '', email: '', cidade: '', telefone: ''
         }));
 
     }
@@ -69,6 +74,8 @@ function DashCadastroUsuario() {
                         <div className='inputs'>
                             <TextField fullWidth label="Nome" type='text' name='nome' value={formCadastro.nome} onChange={onChange} />
                             <TextField fullWidth label="E-mail" type='email' name='email' value={formCadastro.email} onChange={onChange} />
+                            <TextField fullWidth label="Cidade" type='text' name='cidade' value={formCadastro.cidade} onChange={onChange} />
+                            <TextField fullWidth label="Telefone" type='text' name='telefone' value={formCadastro.telefone} onChange={onChange} />
                         </div>
                         <div className='btns-cadastrar'>
                             <Stack spacing={2} direction="row">
